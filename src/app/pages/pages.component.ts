@@ -1,9 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 import { MENU_ITEMS } from './pages-menu';
-import { NbAuthService, NbAuthJWTToken, NbAuthToken } from '@nebular/auth';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-pages',
@@ -15,15 +12,7 @@ import { map } from 'rxjs/operators';
     </ngx-one-column-layout>
   `,
 })
-export class PagesComponent implements OnInit {
-  constructor(private authService: NbAuthService) {
-  }
+export class PagesComponent {
 
   menu = MENU_ITEMS;
-
-  ngOnInit(): void {
-    this.authService.getToken().subscribe((token: NbAuthToken) => {
-      console.log(token);
-    });
-  }
 }

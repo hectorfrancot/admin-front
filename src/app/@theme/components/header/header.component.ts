@@ -1,11 +1,11 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService } from '@nebular/theme';
+import { NbMediaBreakpointsService, NbMenuService, NbSidebarService, NbThemeService, NbMenuItem } from '@nebular/theme';
 
 import { UserData } from '../../../@core/data/users';
-import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
-import { NbAuthService, NbAuthJWTToken } from '@nebular/auth';
+import { NbAuthService, NbAuthJWTToken, NbAuthResult } from '@nebular/auth';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'ngx-header',
@@ -39,15 +39,15 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out' }];
+  userMenu: NbMenuItem[] = [{ title: 'Profile' }, { title: 'Log out', target: 'logout' }];
 
   constructor(private sidebarService: NbSidebarService,
-    private menuService: NbMenuService,
-    private themeService: NbThemeService,
-    private userService: UserData,
-    private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService,
-    private authService: NbAuthService) {
+              private menuService: NbMenuService,
+              private themeService: NbThemeService,
+              private userService: UserData,
+              private breakpointService: NbMediaBreakpointsService,
+              private authService: NbAuthService,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -72,12 +72,20 @@ export class HeaderComponent implements OnInit, OnDestroy {
       )
       .subscribe(themeName => this.currentTheme = themeName);
 
-    this.authService.onTokenChange()
+      this.authService.onTokenChange().pipe(takeUntil(this.destroy$))
       .subscribe((token: NbAuthJWTToken) => {
         if (token.isValid()) {
           this.user = token.getPayload(); // here we receive a payload from the token and assigns it to our `user` variable 
         }
+      });
 
+    this.menuService.onItemClick().pipe(takeUntil(this.destroy$))
+      .subscribe(title => {
+        if (title.item.target === 'logout') {
+          this.authService.logout('email').subscribe((loggedOut: NbAuthResult) => {
+            this.router.navigate([loggedOut.getRedirect()]);
+          });
+        }
       });
   }
 
@@ -92,7 +100,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   toggleSidebar(): boolean {
     this.sidebarService.toggle(true, 'menu-sidebar');
-    this.layoutService.changeLayoutSize();
 
     return false;
   }
