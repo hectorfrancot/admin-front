@@ -1,0 +1,22 @@
+<nb-card>
+  <nb-card-header>Comentarios</nb-card-header>
+  <nb-card-body>
+    <form [formGroup]="comentariosForm" (ngSubmit)="procesarComentario()">
+      <div class="row">
+        <div class="col">
+          <div class="form-group">
+            <label for="tituloControl" class="label">Titulo</label>
+            <input #titulo type="text" nbInput fullWidth fieldSize="small" formControlName="titulo" id="tituloControl" name="tituloControl">
+          </div>
+        </div>
+        <div class="col">
+          <div class="form-group">
+            <label for="detalleControl" class="label">Detalle</label>
+            <input type="text" nbInput fullWidth fieldSize="small" formControlName="detalle" id="detalleControl">
+          </div>
+        </div>
+      </div>
+      <button type="submit" outline nbButton size="small" status="primary" [disabled]="comentariosForm.invalid">Agregar</button>
+    </form>
+  </nb-card-body>
+</nb-card>

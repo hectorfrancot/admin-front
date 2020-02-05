@@ -4,19 +4,20 @@ import { NgModule } from '@angular/core';
 import { PagesComponent } from './pages.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { AuthGuard } from '../@core/utils/auth.guard';
+import { AdministracionComentariosComponent } from './comentarios/components/administracion-comentarios/administracion-comentarios.component';
 
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
   children: [
     {
-      path: 'dashboard',
-      component: DashboardComponent,
+      path: 'comentarios',
+      component: AdministracionComentariosComponent,
       canActivate: [AuthGuard]
     },
     {
       path: '',
-      redirectTo: 'dashboard',
+      redirectTo: 'comentarios',
       pathMatch: 'full',
     },
   ],

@@ -18,6 +18,10 @@
 @import './layout';
 @import './overrides';
 
+
+@import "~ag-grid-community/dist/styles/ag-grid.css";
+@import "~ag-grid-community/dist/styles/ag-theme-balham.css";
+
 // install the framework and custom global styles
 @include nb-install() {
 
@@ -31,3 +35,4 @@
 
   @include nb-overrides();
 };
+
