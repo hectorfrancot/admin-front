@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../environments/environment';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Comentario } from '../models/comentario.model';
 import { BaseResponse } from '../../../shared/models/base-response.model';
 
@@ -9,6 +9,16 @@ import { BaseResponse } from '../../../shared/models/base-response.model';
   providedIn: 'root'
 })
 export class ComentariosService {
+
+  private recargarComentarios: Subject<void> = new Subject<void>();
+
+  recargarComentariosObs(): Observable<void> {
+    return this.recargarComentarios.asObservable();
+  }
+
+  recargarComentariosEmit(): void {
+    this.recargarComentarios.next();
+  }
 
   constructor(private http: HttpClient) { }
 
